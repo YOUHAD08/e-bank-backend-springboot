@@ -19,6 +19,10 @@ public abstract class BankAccount {
     private String id;
     private double balance;
     private Date createdAt;
+    //  this annotation indicate that the values of
+    //   teh AccountStatus column should be the strings
+    //   specified in the class instead of numbers
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     @ManyToOne
