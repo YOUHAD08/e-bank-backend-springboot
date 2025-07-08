@@ -1,9 +1,6 @@
 package ma.youhad.backend;
 
-import ma.youhad.backend.entities.AccountOperation;
-import ma.youhad.backend.entities.CurrentAccount;
-import ma.youhad.backend.entities.Customer;
-import ma.youhad.backend.entities.SavingAccount;
+import ma.youhad.backend.entities.*;
 import ma.youhad.backend.enums.AccountStatus;
 import ma.youhad.backend.enums.OperationType;
 import ma.youhad.backend.repositories.AccountOperationRepository;
@@ -15,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -25,6 +23,33 @@ public class BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 	@Bean
+	CommandLineRunner start(BankAccountRepository bankAccountRepository){
+		return args -> {
+			BankAccount bankAccount = bankAccountRepository.findById("50e2903b-b630-43de-949f-dd57163e4ad2").orElse(null);
+			if (bankAccount != null) {
+				System.out.println("Bank account found");
+				System.out.println(bankAccount.getId());
+				System.out.println(bankAccount.getBalance());
+				System.out.println(bankAccount.getStatus());
+				System.out.println(bankAccount.getCreatedAt());
+				System.out.println(bankAccount.getCustomer().getName());
+				if( bankAccount instanceof CurrentAccount){
+					System.out.println("Over Draft : " + ((CurrentAccount)bankAccount).getOverdraft());
+			    } else if (bankAccount instanceof SavingAccount) {
+					System.out.println("Interest Rate : " +((SavingAccount)bankAccount).getInterestRate());
+				}
+				bankAccount.getAccountOperations().forEach(operation -> {
+					System.out.println("Operation");
+					System.out.println("Operation Id : " + operation.getId());
+					System.out.println("Operation Date : " + operation.getOperationDate());
+					System.out.println("Operation Amount : " +operation.getAmount());
+				})
+			;}
+			};
+	}
+
+
+   //@Bean
 	CommandLineRunner start(CustomerRepository customerRepository,
 							BankAccountRepository bankAccountRepository,
 							AccountOperationRepository accountOperationRepository){
