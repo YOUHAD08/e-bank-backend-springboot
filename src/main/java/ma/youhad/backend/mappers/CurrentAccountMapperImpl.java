@@ -19,6 +19,7 @@ public class CurrentAccountMapperImpl {
         CurrentAccountDTO currentAccountDTO = new CurrentAccountDTO();
         BeanUtils.copyProperties(currentAccount, currentAccountDTO);
         currentAccountDTO.setCustomerDTO(customerMapper.fromCustomerToCustomerDTO(currentAccount.getCustomer()));
+        currentAccountDTO.setAccountType(currentAccount.getClass().getSimpleName());
         return currentAccountDTO;
     }
 

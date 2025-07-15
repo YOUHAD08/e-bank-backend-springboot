@@ -19,6 +19,7 @@ public class SavingAccountMapperImpl {
         SavingAccountDTO savingAccountDTO = new SavingAccountDTO();
         BeanUtils.copyProperties(savingAccount, savingAccountDTO);
         savingAccountDTO.setCustomerDTO(customerMapper.fromCustomerToCustomerDTO(savingAccount.getCustomer()));
+        savingAccountDTO.setAccountType(savingAccount.getClass().getSimpleName());
         return savingAccountDTO;
 
     }

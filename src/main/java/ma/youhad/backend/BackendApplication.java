@@ -1,6 +1,9 @@
 package ma.youhad.backend;
 
+import ma.youhad.backend.dtos.BankAccountDTO;
+import ma.youhad.backend.dtos.CurrentAccountDTO;
 import ma.youhad.backend.dtos.CustomerDTO;
+import ma.youhad.backend.dtos.SavingAccountDTO;
 import ma.youhad.backend.entities.*;
 import ma.youhad.backend.enums.AccountStatus;
 import ma.youhad.backend.enums.OperationType;
@@ -39,19 +42,23 @@ public class BackendApplication {
 			});
 			customerService.getCustomers().forEach(customer -> {
                 try {
-                    bankAccountService.createCurrentBankAccount(Math.random() * 10000,
-							customer.getId(),
-							1000);
-					bankAccountService.createSavingBankAccount(Math.random() * 10000,
-							customer.getId(),
-							5.5);
-					List<BankAccount> bankAccountList =bankAccountService.getAllBankAccounts();
-					for (BankAccount bankAccount : bankAccountList) {
+					CurrentAccountDTO currentAccountDTO = new CurrentAccountDTO();
+					currentAccountDTO.setBalance(Math.random() * 10000);
+					currentAccountDTO.setOverdraft(1000);
+                    bankAccountService.createCurrentBankAccount(currentAccountDTO,customer.getId());
+
+					SavingAccountDTO savingAccountDTO = new SavingAccountDTO();
+					savingAccountDTO.setBalance(Math.random() * 10000);
+					savingAccountDTO.setInterestRate(5.5);
+					bankAccountService.createSavingBankAccount(savingAccountDTO, customer.getId());
+
+					List<BankAccountDTO> bankAccountDTOList =bankAccountService.getAllBankAccounts();
+					for (BankAccountDTO bankAccountDTO : bankAccountDTOList) {
 						for (int i = 0; i <10 ; i++){
-							bankAccountService.credit(bankAccount.getId(),
+							bankAccountService.credit(bankAccountDTO.getId(),
 									10000+Math.random()*12000,
 									"Credit");
-							bankAccountService.debit(bankAccount.getId(),
+							bankAccountService.debit(bankAccountDTO.getId(),
 									1000+Math.random()*9000,
 									"Debit");
 						}

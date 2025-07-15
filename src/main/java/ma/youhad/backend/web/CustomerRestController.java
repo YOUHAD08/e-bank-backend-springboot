@@ -3,11 +3,9 @@ package ma.youhad.backend.web;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.youhad.backend.dtos.CustomerDTO;
-import ma.youhad.backend.entities.Customer;
 import ma.youhad.backend.exceptions.CustomerNotFoundException;
 import ma.youhad.backend.services.interfaces.CustomerService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
