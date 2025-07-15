@@ -20,7 +20,7 @@ public abstract class BankAccount {
     private double balance;
     private Date createdAt;
     //  this annotation indicate that the values of
-    //   teh AccountStatus column should be the strings
+    //   the AccountStatus column should be the strings
     //   specified in the class instead of numbers
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
@@ -28,6 +28,6 @@ public abstract class BankAccount {
     @ManyToOne
     private Customer customer;
 
-    @OneToMany(mappedBy = "bankAccount", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "bankAccount")
     private List<AccountOperation> accountOperations;
 }

@@ -3,16 +3,21 @@ package ma.youhad.backend;
 import ma.youhad.backend.entities.*;
 import ma.youhad.backend.enums.AccountStatus;
 import ma.youhad.backend.enums.OperationType;
+import ma.youhad.backend.exceptions.BankAccountNotFoundException;
+import ma.youhad.backend.exceptions.CustomerNotFoundException;
+import ma.youhad.backend.exceptions.InsufficientBalanceException;
 import ma.youhad.backend.repositories.AccountOperationRepository;
 import ma.youhad.backend.repositories.BankAccountRepository;
 import ma.youhad.backend.repositories.CustomerRepository;
+import ma.youhad.backend.services.interfaces.BankAccountService;
+import ma.youhad.backend.services.interfaces.CustomerService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -23,76 +28,37 @@ public class BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 	@Bean
-	CommandLineRunner start(BankAccountRepository bankAccountRepository){
-		return args -> {
-			BankAccount bankAccount = bankAccountRepository.findById("50e2903b-b630-43de-949f-dd57163e4ad2").orElse(null);
-			if (bankAccount != null) {
-				System.out.println("Bank account found");
-				System.out.println(bankAccount.getId());
-				System.out.println(bankAccount.getBalance());
-				System.out.println(bankAccount.getStatus());
-				System.out.println(bankAccount.getCreatedAt());
-				System.out.println(bankAccount.getCustomer().getName());
-				if( bankAccount instanceof CurrentAccount){
-					System.out.println("Over Draft : " + ((CurrentAccount)bankAccount).getOverdraft());
-			    } else if (bankAccount instanceof SavingAccount) {
-					System.out.println("Interest Rate : " +((SavingAccount)bankAccount).getInterestRate());
-				}
-				bankAccount.getAccountOperations().forEach(operation -> {
-					System.out.println("Operation");
-					System.out.println("Operation Id : " + operation.getId());
-					System.out.println("Operation Date : " + operation.getOperationDate());
-					System.out.println("Operation Amount : " +operation.getAmount());
-				})
-			;}
-			};
-	}
-
-
-   //@Bean
-	CommandLineRunner start(CustomerRepository customerRepository,
-							BankAccountRepository bankAccountRepository,
-							AccountOperationRepository accountOperationRepository){
+	CommandLineRunner start(BankAccountService bankAccountService, CustomerService customerService) {
 		return args -> {
 			Stream.of("Ayoub","Yasmine","Khalid").forEach(name -> {
 				Customer customer = new Customer();
 				customer.setName(name);
 				customer.setEmail(name+"@gmail.com");
-				customerRepository.save(customer);
-
+				customerService.createCustomer(customer);
 			});
-			customerRepository.findAll().forEach(customer -> {
-				CurrentAccount currentAccount = new CurrentAccount();
-				// Generate an ID that depend on system date
-				currentAccount.setId(UUID.randomUUID().toString());
-				currentAccount.setCustomer(customer);
-				currentAccount.setBalance(Math.random()*10000);
-				currentAccount.setOverdraft(10000);
-				currentAccount.setCreatedAt(new Date());
-				currentAccount.setStatus(AccountStatus.CREATED);
-				bankAccountRepository.save(currentAccount);
-
-				SavingAccount savingAccount = new SavingAccount();
-				savingAccount.setId(UUID.randomUUID().toString());
-				savingAccount.setCustomer(customer);
-				savingAccount.setBalance(Math.random()*10000);
-				savingAccount.setInterestRate(5.5);
-				savingAccount.setCreatedAt(new Date());
-				savingAccount.setStatus(AccountStatus.CREATED);
-				bankAccountRepository.save(savingAccount);
-			});
-			bankAccountRepository.findAll().forEach(account->{
-				for (int i = 0; i <10 ; i++) {
-					AccountOperation accountOperation=new AccountOperation();
-					accountOperation.setOperationDate(new Date());
-					accountOperation.setAmount(Math.random()*12000);
-					accountOperation.setType(Math.random()>0.5? OperationType.DEBIT: OperationType.CREDIT);
-					accountOperation.setBankAccount(account);
-					accountOperationRepository.save(accountOperation);
-				}
-			});
-
-		};
+			customerService.getCustomers().forEach(customer -> {
+                try {
+                    bankAccountService.createCurrentBankAccount(Math.random() * 10000,
+							customer.getId(),
+							1000);
+					bankAccountService.createSavingBankAccount(Math.random() * 10000,
+							customer.getId(),
+							5.5);
+					List<BankAccount> bankAccountList =bankAccountService.getAllBankAccounts();
+					for (BankAccount bankAccount : bankAccountList) {
+						for (int i = 0; i <10 ; i++){
+							bankAccountService.credit(bankAccount.getId(),
+									10000+Math.random()*12000,
+									"Credit");
+							bankAccountService.debit(bankAccount.getId(),
+									1000+Math.random()*9000,
+									"Debit");
+						}
+					}
+                } catch (CustomerNotFoundException | BankAccountNotFoundException | InsufficientBalanceException e) {
+                    e.printStackTrace();
+                }
+            });
+			};
 	}
-
 }
