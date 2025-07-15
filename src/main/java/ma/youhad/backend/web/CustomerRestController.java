@@ -23,11 +23,11 @@ public class CustomerRestController {
     }
 
     @GetMapping("/customer/{id}")
-    public CustomerDTO getCustomer(@PathVariable int id) throws CustomerNotFoundException {
+    public CustomerDTO getCustomer(@PathVariable long id) throws CustomerNotFoundException {
         log.info("Get customer by id");
         return customerService.getCustomer(id);
     }
-    @PostMapping("/customers")
+    @PostMapping("/customer")
     public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO) {
         log.info("Create customer");
         return customerService.createCustomer(customerDTO);
