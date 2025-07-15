@@ -2,10 +2,11 @@ package ma.youhad.backend.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ma.youhad.backend.dtos.CustomerDTO;
 import ma.youhad.backend.entities.Customer;
+import ma.youhad.backend.exceptions.CustomerNotFoundException;
 import ma.youhad.backend.services.interfaces.CustomerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,8 +17,32 @@ public class CustomerRestController {
     CustomerService customerService;
 
     @GetMapping("/customers")
-    public List<Customer> getAllCustomers() {
+    public List<CustomerDTO> getAllCustomers() {
         log.info("Get all customers");
         return customerService.getCustomers();
+    }
+
+    @GetMapping("/customer/{id}")
+    public CustomerDTO getCustomer(@PathVariable int id) throws CustomerNotFoundException {
+        log.info("Get customer by id");
+        return customerService.getCustomer(id);
+    }
+    @PostMapping("/customers")
+    public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO) {
+        log.info("Create customer");
+        return customerService.createCustomer(customerDTO);
+    }
+
+    @PutMapping("/customer/{id}")
+    public CustomerDTO updateCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable long id) {
+        log.info("Update customer");
+        customerDTO.setId(id);
+        return customerService.updateCustomer(id, customerDTO);
+    }
+
+    @DeleteMapping("/customer/{id}")
+    public void deleteCustomer(@PathVariable long id) {
+        log.info("Delete customer");
+        customerService.deleteCustomer(id);
     }
 }

@@ -1,5 +1,6 @@
 package ma.youhad.backend;
 
+import ma.youhad.backend.dtos.CustomerDTO;
 import ma.youhad.backend.entities.*;
 import ma.youhad.backend.enums.AccountStatus;
 import ma.youhad.backend.enums.OperationType;
@@ -31,10 +32,10 @@ public class BackendApplication {
 	CommandLineRunner start(BankAccountService bankAccountService, CustomerService customerService) {
 		return args -> {
 			Stream.of("Ayoub","Yasmine","Khalid").forEach(name -> {
-				Customer customer = new Customer();
-				customer.setName(name);
-				customer.setEmail(name+"@gmail.com");
-				customerService.createCustomer(customer);
+				CustomerDTO customerDTO = new CustomerDTO();
+				customerDTO.setName(name);
+				customerDTO.setEmail(name+"@gmail.com");
+				customerService.createCustomer(customerDTO);
 			});
 			customerService.getCustomers().forEach(customer -> {
                 try {
