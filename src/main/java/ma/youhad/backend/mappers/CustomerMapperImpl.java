@@ -6,10 +6,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 
-@Service
+
 // MapStruct is framework that does the mapping from entities to DTOS and vis versa
 // in this framework we only define interfaces and method signatures and MapStruct
 // will generate th code
+@Service
 public class CustomerMapperImpl {
 
     public CustomerDTO fromCustomerToCustomerDTO(Customer customer) {

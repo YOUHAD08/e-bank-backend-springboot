@@ -51,22 +51,21 @@ public class BackendApplication {
 					savingAccountDTO.setBalance(Math.random() * 10000);
 					savingAccountDTO.setInterestRate(5.5);
 					bankAccountService.createSavingBankAccount(savingAccountDTO, customer.getId());
-
-					List<BankAccountDTO> bankAccountDTOList =bankAccountService.getAllBankAccounts();
-					for (BankAccountDTO bankAccountDTO : bankAccountDTOList) {
-						for (int i = 0; i <10 ; i++){
-							bankAccountService.credit(bankAccountDTO.getId(),
-									10000+Math.random()*12000,
-									"Credit");
-							bankAccountService.debit(bankAccountDTO.getId(),
-									1000+Math.random()*9000,
-									"Debit");
-						}
-					}
-                } catch (CustomerNotFoundException | BankAccountNotFoundException | InsufficientBalanceException e) {
+                } catch (CustomerNotFoundException e) {
                     e.printStackTrace();
                 }
             });
+			List<BankAccountDTO> bankAccountDTOList =bankAccountService.getAllBankAccounts();
+			for (BankAccountDTO bankAccountDTO : bankAccountDTOList) {
+				for (int i = 0; i <10 ; i++){
+					bankAccountService.credit(bankAccountDTO.getId(),
+							10000+Math.random()*12000,
+							"Credit");
+					bankAccountService.debit(bankAccountDTO.getId(),
+							1000+Math.random()*9000,
+							"Debit");
+				}
+			}
 			};
 	}
 }
