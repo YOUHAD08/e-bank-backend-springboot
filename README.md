@@ -156,27 +156,37 @@ Contributions are welcome! Feel free to open issues or pull requests so we grow 
 
 ---
 
-## 🖥️ Next Steps: FFrontend Development & Future Database Migration
+## 🖥️ Next Steps: Frontend Development, Agentic AI & Future Database Migration
 
-This project currently implements the **backend RESTful API** using **Spring Boot** and a **relational MySQL database**.  
+This project currently implements the **backend RESTful API** using **Spring Boot** and a relational **MySQL** database.
 
-## 🔜 Upcoming Plans
+### 🔜 Upcoming Plans
 
-### ✅ Frontend:
+#### ✅ Frontend:
 The frontend will be built using **Angular**, providing a clean and interactive UI for:
 
 - Customer and account management
 - Performing debit/credit/transfer operations
 - Viewing paginated account operation history
 
-### 🔁 Future Migration to MongoDB:
+#### 🤖 Agentic AI Integration (Planned):
+In future development, I plan to build an **agentic AI component** to work alongside this backend. While the full scope is yet to be defined, potential features might include:
+
+- Intelligent customer support and chatbot integration
+- Automated transaction analysis and fraud detection
+- Personalized financial advice and account management
+- Dynamic task automation within the banking system
+
+This agentic AI will aim to enhance user experience, improve operational efficiency, and provide smart automation capabilities.
+
+#### 🔁 Future Migration to MongoDB:
 Although this version uses **MySQL**, a future version of this backend will be migrated to **MongoDB** to take advantage of:
 
 - Flexible document-based schema
 - Easier scalability
 - Faster iterations in development
 
-Stay tuned for both the **Angular frontend** and the **MongoDB-enhanced backend**!
+Stay tuned for the **Angular frontend**, the **agentic AI enhancements**, and the **MongoDB-backed backend**!
 
 ---
 
