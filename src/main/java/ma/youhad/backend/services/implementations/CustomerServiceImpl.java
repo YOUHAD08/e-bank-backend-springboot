@@ -63,6 +63,9 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
     }
 
-
-
+    @Override
+    public List<CustomerDTO> searchCustomers(String keyword) {
+        List<Customer> customers = customerRepository.searchCustomer(keyword);
+        return customers.stream().map(customer -> customerMapper.fromCustomerToCustomerDTO(customer)).collect(Collectors.toList());
+    }
 }

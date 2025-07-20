@@ -17,8 +17,4 @@ public interface BankAccountService {
     CurrentAccountDTO updateCurrentAccount(String bankAccountId, CurrentAccountDTO currentAccountDTO);
     SavingAccountDTO updateSavingAccount(String bankAccountId, SavingAccountDTO savingAccountDTO);
     void deleteBankAccount(String accountId);
-    void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, InsufficientBalanceException;
-    void credit(String accountId, double amount, String description) throws BankAccountNotFoundException;
-    void transfer(String fromCustomerId, String toCustomerId, double amount) throws BankAccountNotFoundException, InsufficientBalanceException;
-
 }

@@ -1,6 +1,5 @@
 package ma.youhad.backend.mappers;
 
-import lombok.AllArgsConstructor;
 import ma.youhad.backend.dtos.AccountOperationDTO;
 import ma.youhad.backend.entities.AccountOperation;
 import org.springframework.beans.BeanUtils;

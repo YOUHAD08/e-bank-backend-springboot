@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class CustomerRestController {
     CustomerService customerService;
 
@@ -24,6 +25,12 @@ public class CustomerRestController {
     public CustomerDTO getCustomer(@PathVariable long id) throws CustomerNotFoundException {
         log.info("Get customer by id");
         return customerService.getCustomer(id);
+    }
+
+    @GetMapping("/customers/search")
+    public List<CustomerDTO> searchCustomers(@RequestParam(name = "keyword" ,defaultValue = "") String keyword) throws CustomerNotFoundException {
+        log.info("Search customer by keyword");
+        return customerService.searchCustomers("%"+keyword+"%");
     }
     @PostMapping("/customer")
     public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO) {

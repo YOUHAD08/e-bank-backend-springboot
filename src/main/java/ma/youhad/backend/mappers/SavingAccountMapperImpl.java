@@ -1,9 +1,7 @@
 package ma.youhad.backend.mappers;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import ma.youhad.backend.dtos.SavingAccountDTO;
-import ma.youhad.backend.entities.CurrentAccount;
 import ma.youhad.backend.entities.SavingAccount;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

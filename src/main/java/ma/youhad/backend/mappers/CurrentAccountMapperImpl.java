@@ -2,9 +2,7 @@ package ma.youhad.backend.mappers;
 
 import lombok.AllArgsConstructor;
 import ma.youhad.backend.dtos.CurrentAccountDTO;
-import ma.youhad.backend.dtos.CustomerDTO;
 import ma.youhad.backend.entities.CurrentAccount;
-import ma.youhad.backend.entities.Customer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

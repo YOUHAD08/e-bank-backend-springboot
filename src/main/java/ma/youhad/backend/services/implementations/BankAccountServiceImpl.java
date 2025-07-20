@@ -7,10 +7,8 @@ import ma.youhad.backend.dtos.CurrentAccountDTO;
 import ma.youhad.backend.dtos.CustomerDTO;
 import ma.youhad.backend.dtos.SavingAccountDTO;
 import ma.youhad.backend.entities.*;
-import ma.youhad.backend.enums.OperationType;
 import ma.youhad.backend.exceptions.BankAccountNotFoundException;
 import ma.youhad.backend.exceptions.CustomerNotFoundException;
-import ma.youhad.backend.exceptions.InsufficientBalanceException;
 import ma.youhad.backend.mappers.CurrentAccountMapperImpl;
 import ma.youhad.backend.mappers.CustomerMapperImpl;
 import ma.youhad.backend.mappers.SavingAccountMapperImpl;
@@ -125,52 +123,5 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void deleteBankAccount(String accountId) {
         log.info("Delete Bank Account with id {}", accountId);
         bankAccountRepository.deleteById(accountId);
-    }
-
-    @Override
-    public void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, InsufficientBalanceException {
-        log.info("debit called");
-        // Code : Service Rules +
-        BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(()-> new BankAccountNotFoundException("Bank Account not found"));
-        if (bankAccount.getBalance() < amount) {
-            throw new InsufficientBalanceException("Not enough balance");
-        }
-        // Save the operation
-        AccountOperation accountOperation = new AccountOperation();
-        accountOperation.setType(OperationType.DEBIT);
-        accountOperation.setAmount(amount);
-        accountOperation.setDescription(description);
-        accountOperation.setOperationDate(new Date());
-        accountOperation.setBankAccount(bankAccount);
-        accountOperationRepository.save(accountOperation);
-        // Save the changes
-        bankAccount.setBalance(bankAccount.getBalance() - amount);
-        bankAccountRepository.save(bankAccount);
-    }
-
-    @Override
-    public void credit(String accountId, double amount, String description) throws BankAccountNotFoundException {
-        log.info("credit called");
-        BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(()-> new BankAccountNotFoundException("Bank Account not found"));
-        // Save the operation
-        AccountOperation accountOperation = new AccountOperation();
-        accountOperation.setType(OperationType.CREDIT);
-        accountOperation.setAmount(amount);
-        accountOperation.setDescription(description);
-        accountOperation.setOperationDate(new Date());
-        accountOperation.setBankAccount(bankAccount);
-        accountOperationRepository.save(accountOperation);
-        // Save the changes
-        bankAccount.setBalance(bankAccount.getBalance() + amount);
-        bankAccountRepository.save(bankAccount);
-
-    }
-
-    @Override
-    public void transfer(String fromCustomerId, String toCustomerId, double amount) throws BankAccountNotFoundException, InsufficientBalanceException {
-        log.info("transfer called");
-        debit(fromCustomerId, amount, "Transfer to" + toCustomerId);
-        credit(toCustomerId, amount, "Transfer from" + fromCustomerId);
-
     }
 }
