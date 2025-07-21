@@ -6,6 +6,9 @@ import ma.youhad.backend.dtos.AccountHistoryDTO;
 import ma.youhad.backend.dtos.AccountOperationDTO;
 import ma.youhad.backend.entities.AccountOperation;
 import ma.youhad.backend.entities.BankAccount;
+import ma.youhad.backend.entities.CurrentAccount;
+import ma.youhad.backend.entities.SavingAccount;
+import ma.youhad.backend.enums.AccountType;
 import ma.youhad.backend.enums.OperationType;
 import ma.youhad.backend.exceptions.BankAccountNotFoundException;
 import ma.youhad.backend.exceptions.InsufficientBalanceException;
@@ -59,6 +62,14 @@ public class AccountOperationServiceImpl implements AccountOperationService {
         accountHistoryDTO.setCurrentPage(page);
         accountHistoryDTO.setPageSize(size);
         accountHistoryDTO.setTotalPages(accountOperations.getTotalPages());
+        accountHistoryDTO.setCustomerName(bankAccount.getCustomer().getName());
+        accountHistoryDTO.setStatus(bankAccount.getStatus());
+        accountHistoryDTO.setCreatedAt(bankAccount.getCreatedAt());
+        if (bankAccount instanceof CurrentAccount) {
+            accountHistoryDTO.setAccountType(AccountType.CURRENT);
+        } else if (bankAccount instanceof SavingAccount) {
+            accountHistoryDTO.setAccountType(AccountType.SAVING);
+        }
         return accountHistoryDTO;
     }
 

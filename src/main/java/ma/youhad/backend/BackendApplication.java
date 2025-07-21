@@ -4,6 +4,7 @@ import ma.youhad.backend.dtos.BankAccountDTO;
 import ma.youhad.backend.dtos.CurrentAccountDTO;
 import ma.youhad.backend.dtos.CustomerDTO;
 import ma.youhad.backend.dtos.SavingAccountDTO;
+import ma.youhad.backend.enums.AccountStatus;
 import ma.youhad.backend.exceptions.CustomerNotFoundException;
 import ma.youhad.backend.services.interfaces.AccountOperationService;
 import ma.youhad.backend.services.interfaces.BankAccountService;
@@ -13,7 +14,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 @SpringBootApplication
@@ -21,8 +26,9 @@ public class BackendApplication {
 
 
 	private final AccountOperationService accountOperationService;
-
-    public BackendApplication(AccountOperationService accountOperationService) {
+	long startMillis = new Date(120, 0, 1).getTime(); // January 1, 2020
+	long endMillis = System.currentTimeMillis();      // current date/time
+	public BackendApplication(AccountOperationService accountOperationService) {
         this.accountOperationService = accountOperationService;
     }
 
@@ -39,15 +45,21 @@ public class BackendApplication {
 				customerService.createCustomer(customerDTO);
 			});
 			customerService.getCustomers().forEach(customer -> {
+				long randomMillis = ThreadLocalRandom.current().nextLong(startMillis, endMillis);
+				Date randomDate = new Date(randomMillis);
                 try {
 					CurrentAccountDTO currentAccountDTO = new CurrentAccountDTO();
 					currentAccountDTO.setBalance(Math.random() * 10000);
 					currentAccountDTO.setOverdraft(1000);
+					currentAccountDTO.setCreatedAt(randomDate);
+					currentAccountDTO.setStatus(AccountStatus.ACTIVATED);
                     bankAccountService.createCurrentBankAccount(currentAccountDTO,customer.getId());
 
 					SavingAccountDTO savingAccountDTO = new SavingAccountDTO();
 					savingAccountDTO.setBalance(Math.random() * 10000);
 					savingAccountDTO.setInterestRate(5.5);
+					savingAccountDTO.setCreatedAt(randomDate);
+					savingAccountDTO.setStatus(AccountStatus.CREATED);
 					bankAccountService.createSavingBankAccount(savingAccountDTO, customer.getId());
                 } catch (CustomerNotFoundException e) {
                     e.printStackTrace();
