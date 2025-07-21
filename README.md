@@ -51,7 +51,6 @@ This project provides core banking functionalities such as customer management, 
 This backend currently uses a **relational MySQL** database to persist customer, account, and transaction data.
 
 ![MySQL Database Schema](images/mysql-db.png)
-> 🖼️ *Place a screenshot of your phpMyAdmin database structure here.*
 
 ### 🔗 Relationships
 
