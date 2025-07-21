@@ -17,4 +17,5 @@ public interface BankAccountService {
     CurrentAccountDTO updateCurrentAccount(String bankAccountId, CurrentAccountDTO currentAccountDTO);
     SavingAccountDTO updateSavingAccount(String bankAccountId, SavingAccountDTO savingAccountDTO);
     void deleteBankAccount(String accountId);
+    List<BankAccountDTO> getAllBankAccountsbyCustomer(long customerId);
 }

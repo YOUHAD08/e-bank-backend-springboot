@@ -19,7 +19,6 @@ import ma.youhad.backend.services.interfaces.BankAccountService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -123,5 +122,19 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void deleteBankAccount(String accountId) {
         log.info("Delete Bank Account with id {}", accountId);
         bankAccountRepository.deleteById(accountId);
+    }
+
+    @Override
+    public List<BankAccountDTO> getAllBankAccountsbyCustomer(long customerId) {
+        log.info("get all Bank Accounts by customer id {}", customerId);
+        List<BankAccount> bankAccounts =bankAccountRepository.findByCustomerId(customerId);
+        return bankAccounts.stream().map(bankAccount ->{
+            if(bankAccount instanceof SavingAccount) {
+                return savingAccountMapper.fromSavingAccountToSavingAccountDTO((SavingAccount) bankAccount);
+            }
+            else {
+                return currentAccountMapper.fromCurrentAccountToCurrentAccountDTO((CurrentAccount) bankAccount);
+            }
+        }).collect(Collectors.toList());
     }
 }

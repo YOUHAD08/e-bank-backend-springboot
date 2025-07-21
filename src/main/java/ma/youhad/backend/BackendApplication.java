@@ -55,12 +55,26 @@ public class BackendApplication {
 					currentAccountDTO.setStatus(AccountStatus.ACTIVATED);
                     bankAccountService.createCurrentBankAccount(currentAccountDTO,customer.getId());
 
+					CurrentAccountDTO currentAccountDTO2 = new CurrentAccountDTO();
+					currentAccountDTO2.setBalance(Math.random() * 10000);
+					currentAccountDTO2.setOverdraft(1000);
+					currentAccountDTO2.setCreatedAt(randomDate);
+					currentAccountDTO2.setStatus(AccountStatus.SUSPENDED);
+					bankAccountService.createCurrentBankAccount(currentAccountDTO2,customer.getId());
+
 					SavingAccountDTO savingAccountDTO = new SavingAccountDTO();
 					savingAccountDTO.setBalance(Math.random() * 10000);
 					savingAccountDTO.setInterestRate(5.5);
 					savingAccountDTO.setCreatedAt(randomDate);
 					savingAccountDTO.setStatus(AccountStatus.CREATED);
 					bankAccountService.createSavingBankAccount(savingAccountDTO, customer.getId());
+
+					SavingAccountDTO savingAccountDTO2 = new SavingAccountDTO();
+					savingAccountDTO2.setBalance(Math.random() * 10000);
+					savingAccountDTO2.setInterestRate(5.5);
+					savingAccountDTO2.setCreatedAt(randomDate);
+					savingAccountDTO2.setStatus(AccountStatus.ACTIVATED);
+					bankAccountService.createSavingBankAccount(savingAccountDTO2, customer.getId());
                 } catch (CustomerNotFoundException e) {
                     e.printStackTrace();
                 }

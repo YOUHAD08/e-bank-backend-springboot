@@ -65,5 +65,11 @@ public class BankAccountRestController {
        bankAccountService.deleteBankAccount(accountId);
     }
 
+    @GetMapping("/accounts/{customerId}")
+    public List<BankAccountDTO> getBankAccountsByCustomer(@PathVariable long customerId) {
+        log.info("Get All BankAccounts of Customer with id"+ customerId);
+        return bankAccountService.getAllBankAccountsbyCustomer(customerId);
+    }
+
 
 }
