@@ -34,7 +34,6 @@ This project provides core banking functionalities such as customer management, 
 ## 📂 Project Structure
 
 ![Backend Project Structure](images/project-structure.png)
-> 🖼️ *Place a screenshot of your project directory structure here.*
 
 - **Entities:** `Customer`, `BankAccount`, `CurrentAccount`, `SavingAccount`, `AccountOperation`
 - **DTOs:** For safe API communication
