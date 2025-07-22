@@ -32,6 +32,7 @@ Handles common banking errors:
 - `InsufficientBalanceException`
 
 ### ✅ API Documentation
+
 Interactive Swagger UI at:
   http://localhost:8085/swagger-ui/index.html
 ---
