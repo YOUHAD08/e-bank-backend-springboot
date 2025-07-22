@@ -1,34 +1,39 @@
 # 💳 E-BANK Backend Application
 
-A robust and scalable backend banking system built with **Spring Boot**, **Spring Data JPA**, and **MySQL**.
+A robust and modular backend banking system built with **Spring Boot**, **Spring Data JPA**, and **MySQL**.
 
-This project provides core banking functionalities such as customer management, bank accounts (current and saving), operations (debit, credit, transfer), and transaction history with pagination. The API is fully documented using **Swagger UI** for easy testing and exploration.
+This backend powers core banking features such as customer management, bank account operations (debit, credit, transfer), and full transaction history. The application is structured with clean architectural separation (DTOs, services, mappers, etc.) and is fully documented via Swagger UI for testing and exploration.
 
-> ⚠️ This is the **backend** only. The frontend will be implemented using **Angular** in the next phase of the project.
+> ⚠️ This repository contains the **backend only**. The **Angular frontend** is implemented in a this [repository](https://github.com/YOUHAD08/e-bank-frontend-angular).
 
 ---
 
 ## 🚀 Features
 
-- **Customer Management**  
-  Create, update, retrieve, and delete customers.
+### ✅ Customer Management
+- Create, update, retrieve, and delete customers.
 
-- **Bank Accounts**
-    - Supports *Current Accounts* (with overdraft) and *Saving Accounts* (with interest rate).
-    - Create, update, delete, and retrieve accounts.
+### ✅ Bank Account Management
+- Supports **Current Accounts** (with overdraft) and **Saving Accounts** (with interest rate).
+- Create, update, delete, and retrieve accounts.
 
-- **Account Operations**  
-  Debit, credit, and transfer money between accounts with full transaction history.
+### ✅ Account Operations
+- Debit, credit, and transfer between accounts.
+- Track full transaction history with pagination and detailed summaries.
 
-- **Paginated Transaction History**  
-  Fetch detailed transaction records with pagination.
+### ✅ Advanced History API
+- Structured account history using `AccountHistoryDTO`.
+- Access latest operation summaries.
 
-- **Exception Handling**    
-   common banking errors like insufficient balance or missing accounts/customers.
+### ✅ Exception Handling
+Handles common banking errors:
+- `CustomerNotFoundException`
+- `BankAccountNotFoundException`
+- `InsufficientBalanceException`
 
-- **API Documentation**  
-  Interactive documentation available via Swagger UI.
-
+### ✅ API Documentation
+Interactive Swagger UI at:
+  http://localhost:8085/swagger-ui/index.html
 ---
 
 ## 📂 Project Structure
@@ -116,6 +121,7 @@ This backend currently uses a **relational MySQL** database to persist customer,
 
 - `GET /customers` - List all customers 
 - `GET /customer/{id}` - Get customer by ID 
+- `GET /customers/search` - Search customers by keyword (?keyword=)
 - `POST /customer` - Create new customer 
 - `PUT /customer/{id}` - Update customer 
 - `DELETE /customer/{id}` - Delete customer
@@ -124,6 +130,7 @@ This backend currently uses a **relational MySQL** database to persist customer,
 
 - `GET /accounts` - List all bank accounts
 - `GET /account/{accountId}` - Get bank account details 
+- `GET /accounts/{customerId}` Get all bank accounts of a customer
 - `POST /currentAccount/{customerId}` - Create current account for customer 
 - `POST /savingAccount/{customerId}` - Create saving account for customer 
 - `PUT /currentAccount/{accountId}` - Update current account 
@@ -160,12 +167,23 @@ This project currently implements the **backend RESTful API** using **Spring Boo
 
 ### 🔜 Upcoming Plans
 
-#### ✅ Frontend:
-The frontend will be built using **Angular**, providing a clean and interactive UI for:
+#### 🛠️ Frontend (In Progress):
 
-- Customer and account management
-- Performing debit/credit/transfer operations
+The frontend is currently under development using Angular and is structured to provide a clean and interactive UI for:
+
+- Customer and account management 
+- Performing debit/credit/transfer operations 
 - Viewing paginated account operation history
+- ... and more features to come
+
+> ⚠️ The frontend is still a **Work In Progress**
+> 
+> You can check the current WIP version of the frontend in the following
+> [repository](https://github.com/YOUHAD08/e-bank-frontend-angular)
+> 
+> for inspiration or to get an idea of the architecture:
+
+
 
 #### 🤖 Agentic AI Integration (Planned):
 In future development, I plan to build an **agentic AI component** to work alongside this backend. While the full scope is yet to be defined, potential features might include:
