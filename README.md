@@ -4,7 +4,7 @@ A robust and modular backend banking system built with **Spring Boot**, **Spring
 
 This backend powers core banking features such as customer management, bank account operations (debit, credit, transfer), and full transaction history. The application is structured with clean architectural separation (DTOs, services, mappers, etc.) and is fully documented via Swagger UI for testing and exploration.
 
-> ⚠️ This repository contains the **backend only**. The **Angular frontend** is implemented in a this [repository](https://github.com/YOUHAD08/e-bank-frontend-angular).
+> ⚠️ This repository contains the **backend only**. The **Angular frontend** is implemented in this  [repository](https://github.com/YOUHAD08/e-bank-frontend-angular.git).
 
 ---
 
@@ -179,7 +179,7 @@ The frontend is currently under development using Angular and is structured to p
 > ⚠️ The frontend is still a **Work In Progress**
 > 
 > You can check the current WIP version of the frontend in the following
-> [repository](https://github.com/YOUHAD08/e-bank-frontend-angular)
+> [repository](https://github.com/YOUHAD08/e-bank-frontend-angular.git)
 > 
 > for inspiration or to get an idea of the architecture:
 
