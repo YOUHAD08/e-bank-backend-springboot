@@ -24,6 +24,12 @@ public class AccountOperationRestController {
         return accountOperationService.accountHistory(accountId);
     }
 
+    @GetMapping("/operations")
+    public List<AccountOperationDTO> getAllOperations(){
+        return accountOperationService.getAllOperations();
+    }
+
+
     @GetMapping("/account/{accountId}/pageOperations")
     public AccountHistoryDTO getAccountHistory(@PathVariable String accountId,
                                                @RequestParam(name="page", defaultValue = "0") int page,

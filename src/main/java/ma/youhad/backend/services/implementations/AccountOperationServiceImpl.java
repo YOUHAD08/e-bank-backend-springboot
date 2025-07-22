@@ -119,4 +119,12 @@ public class AccountOperationServiceImpl implements AccountOperationService {
         credit(toAccountId, amount, "Transfer from" + AccountId);
 
     }
+
+    @Override
+    public List<AccountOperationDTO> getAllOperations() {
+        List<AccountOperation> accountOperations = accountOperationRepository.findAll();
+        return  accountOperations.stream().map(operation -> accountOperationMapperImp.
+                        fromAccountOperationToAccountOperationDTO(operation)).
+                collect(Collectors.toList());
+    }
 }

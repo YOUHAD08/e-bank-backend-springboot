@@ -16,4 +16,6 @@ public interface AccountOperationService {
     void credit(String accountId, double amount, String description) throws BankAccountNotFoundException;
 
     void transfer(String fromCustomerId, String toCustomerId, double amount) throws BankAccountNotFoundException, InsufficientBalanceException;
+
+    List<AccountOperationDTO> getAllOperations();
 }
