@@ -143,7 +143,8 @@ This backend currently uses a **relational MySQL** database to persist customer,
 ### Account Operations API
 
 - `GET /account/{accountId}/operations` - List all operations for an account
-- `GET /account/{accountId}/pageOperations?page=&size=` - Paginated operations list 
+- `GET /account/{accountId}/pageOperations?page=&size=` - Paginated operations list
+- `GET /operations` List all operations
 - `POST /account/{accountId}/debit?amount=&description=` - Debit an account 
 - `POST /account/{accountId}/credit?amount=&description=` - Credit an account 
 - `POST /account/{fromCustomerId}/transfer?toCustomerId=&amount=` - Transfer money
