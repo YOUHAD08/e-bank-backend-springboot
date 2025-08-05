@@ -9,6 +9,7 @@ import ma.youhad.backend.exceptions.InsufficientBalanceException;
 import ma.youhad.backend.services.interfaces.AccountOperationService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,6 @@ public class AccountOperationRestController {
     public List<AccountOperationDTO> getAllOperations(){
         return accountOperationService.getAllOperations();
     }
-
 
     @GetMapping("/account/{accountId}/pageOperations")
     public AccountHistoryDTO getAccountHistory(@PathVariable String accountId,

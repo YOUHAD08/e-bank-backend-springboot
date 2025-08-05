@@ -14,6 +14,7 @@ public class Customer {
     private Long id;
     private String name;
     private String email;
+    private String city;
     @OneToMany(mappedBy = "customer")
     //this tell to the PI that does serialisation json : jackson
     // convert object java to json format

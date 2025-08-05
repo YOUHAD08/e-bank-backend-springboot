@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -75,6 +76,10 @@ public class AccountOperationServiceImpl implements AccountOperationService {
 
     @Override
     public void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, InsufficientBalanceException {
+        long startMillis = new Date(120, 0, 1).getTime(); // January 1, 2020
+        long endMillis = System.currentTimeMillis();
+        long randomMillis = ThreadLocalRandom.current().nextLong(startMillis, endMillis);
+        Date randomDate = new Date(randomMillis);
         log.info("debit called");
         // Code : Service Rules +
         BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(()-> new BankAccountNotFoundException("Bank Account not found"));
@@ -86,7 +91,7 @@ public class AccountOperationServiceImpl implements AccountOperationService {
         accountOperation.setType(OperationType.DEBIT);
         accountOperation.setAmount(amount);
         accountOperation.setDescription(description);
-        accountOperation.setOperationDate(new Date());
+        accountOperation.setOperationDate(randomDate);
         accountOperation.setBankAccount(bankAccount);
         accountOperationRepository.save(accountOperation);
         // Save the changes
@@ -96,6 +101,10 @@ public class AccountOperationServiceImpl implements AccountOperationService {
 
     @Override
     public void credit(String accountId, double amount, String description) throws BankAccountNotFoundException {
+        long startMillis = new Date(120, 0, 1).getTime(); // January 1, 2020
+        long endMillis = System.currentTimeMillis();
+        long randomMillis = ThreadLocalRandom.current().nextLong(startMillis, endMillis);
+        Date randomDate = new Date(randomMillis);
         log.info("credit called");
         BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(()-> new BankAccountNotFoundException("Bank Account not found"));
         // Save the operation
@@ -103,7 +112,7 @@ public class AccountOperationServiceImpl implements AccountOperationService {
         accountOperation.setType(OperationType.CREDIT);
         accountOperation.setAmount(amount);
         accountOperation.setDescription(description);
-        accountOperation.setOperationDate(new Date());
+        accountOperation.setOperationDate(randomDate);
         accountOperation.setBankAccount(bankAccount);
         accountOperationRepository.save(accountOperation);
         // Save the changes

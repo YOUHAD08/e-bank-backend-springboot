@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
@@ -26,7 +27,16 @@ public class BackendApplication {
 
 	private final AccountOperationService accountOperationService;
 	long startMillis = new Date(120, 0, 1).getTime(); // January 1, 2020
-	long endMillis = System.currentTimeMillis();      // current date/time
+	long endMillis = System.currentTimeMillis();
+	List<String> names = List.of("Ayoub", "Yasmine", "Khalid", "Fatima", "Mohammed", "Sara", "Rachid", "Laila", "Omar", "Nada");// current date/time
+	List<String> descriptions = List.of(
+			"Salary", "Invoice payment", "Loan refund", "Online shopping", "Electric bill", "Water bill", "Car repair", "Grocery", "Bonus", "Refund"
+	);
+	List<String> cities = List.of(
+			"Casablanca", "Rabat", "Fes", "Marrakech", "Tangier", "Agadir", "Oujda", "Meknes"
+	);
+	Random random = new Random();
+
 	public BackendApplication(AccountOperationService accountOperationService) {
         this.accountOperationService = accountOperationService;
     }
@@ -37,60 +47,64 @@ public class BackendApplication {
 	@Bean
 	CommandLineRunner start(BankAccountService bankAccountService, CustomerService customerService) {
 		return args -> {
-			Stream.of("Ayoub","Yasmine","Khalid").forEach(name -> {
+			for (String name : names) {
 				CustomerDTO customerDTO = new CustomerDTO();
 				customerDTO.setName(name);
-				customerDTO.setEmail(name+"@gmail.com");
+				customerDTO.setEmail(name.toLowerCase() + "@gmail.com");
+				String randomCity = cities.get(random.nextInt(cities.size()));
+				customerDTO.setCity(randomCity);
 				customerService.createCustomer(customerDTO);
-			});
+			}
+
 			customerService.getCustomers().forEach(customer -> {
-				long randomMillis = ThreadLocalRandom.current().nextLong(startMillis, endMillis);
-				Date randomDate = new Date(randomMillis);
-                try {
-					CurrentAccountDTO currentAccountDTO = new CurrentAccountDTO();
-					currentAccountDTO.setBalance(Math.random() * 10000);
-					currentAccountDTO.setOverdraft(1000);
-					currentAccountDTO.setCreatedAt(randomDate);
-					currentAccountDTO.setStatus(AccountStatus.ACTIVATED);
-                    bankAccountService.createCurrentBankAccount(currentAccountDTO,customer.getId());
+				int numAccounts = ThreadLocalRandom.current().nextInt(3, 6); // 3 to 5 accounts per customer
+				for (int i = 0; i < numAccounts; i++) {
+					try {
+						long randomMillis = ThreadLocalRandom.current().nextLong(startMillis, endMillis);
+						Date randomDate = new Date(randomMillis);
+						double balance = 5000 + Math.random() * 15000;
 
-					CurrentAccountDTO currentAccountDTO2 = new CurrentAccountDTO();
-					currentAccountDTO2.setBalance(Math.random() * 10000);
-					currentAccountDTO2.setOverdraft(1000);
-					currentAccountDTO2.setCreatedAt(randomDate);
-					currentAccountDTO2.setStatus(AccountStatus.SUSPENDED);
-					bankAccountService.createCurrentBankAccount(currentAccountDTO2,customer.getId());
+						if (i % 2 == 0) {
+							// Create current account
+							CurrentAccountDTO currentAccountDTO = new CurrentAccountDTO();
+							currentAccountDTO.setBalance(balance);
+							currentAccountDTO.setOverdraft(ThreadLocalRandom.current().nextInt(500, 2000));
+							currentAccountDTO.setCreatedAt(randomDate);
+							currentAccountDTO.setStatus(AccountStatus.values()[ThreadLocalRandom.current().nextInt(AccountStatus.values().length)]);
+							bankAccountService.createCurrentBankAccount(currentAccountDTO, customer.getId());
+						} else {
+							// Create saving account
+							SavingAccountDTO savingAccountDTO = new SavingAccountDTO();
+							savingAccountDTO.setBalance(balance);
+							savingAccountDTO.setInterestRate(2 + Math.random() * 5); // 2% to 7%
+							savingAccountDTO.setCreatedAt(randomDate);
+							savingAccountDTO.setStatus(AccountStatus.values()[ThreadLocalRandom.current().nextInt(AccountStatus.values().length)]);
+							bankAccountService.createSavingBankAccount(savingAccountDTO, customer.getId());
+						}
 
-					SavingAccountDTO savingAccountDTO = new SavingAccountDTO();
-					savingAccountDTO.setBalance(Math.random() * 10000);
-					savingAccountDTO.setInterestRate(5.5);
-					savingAccountDTO.setCreatedAt(randomDate);
-					savingAccountDTO.setStatus(AccountStatus.CREATED);
-					bankAccountService.createSavingBankAccount(savingAccountDTO, customer.getId());
-
-					SavingAccountDTO savingAccountDTO2 = new SavingAccountDTO();
-					savingAccountDTO2.setBalance(Math.random() * 10000);
-					savingAccountDTO2.setInterestRate(5.5);
-					savingAccountDTO2.setCreatedAt(randomDate);
-					savingAccountDTO2.setStatus(AccountStatus.ACTIVATED);
-					bankAccountService.createSavingBankAccount(savingAccountDTO2, customer.getId());
-                } catch (CustomerNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
-			List<BankAccountDTO> bankAccounts = bankAccountService.getAllBankAccounts();
-			for (BankAccountDTO bankAccount:bankAccounts){
-				for (int i = 0; i <10 ; i++) {
-					String accountId;
-					if(bankAccount instanceof SavingAccountDTO){
-						accountId=((SavingAccountDTO) bankAccount).getId();
-					} else{
-						accountId=((CurrentAccountDTO) bankAccount).getId();
+					} catch (CustomerNotFoundException e) {
+						e.printStackTrace();
 					}
-					accountOperationService.credit(accountId,10000+Math.random()*120000,"Credit");
-					accountOperationService.debit(accountId,1000+Math.random()*9000,"Debit");
+				}
+			});
+
+			// Add credit/debit operations
+			List<BankAccountDTO> bankAccounts = bankAccountService.getAllBankAccounts();
+			for (BankAccountDTO bankAccount : bankAccounts) {
+				String accountId = (bankAccount instanceof SavingAccountDTO)
+						? ((SavingAccountDTO) bankAccount).getId()
+						: ((CurrentAccountDTO) bankAccount).getId();
+				Random random = new Random();
+				int numOps = ThreadLocalRandom.current().nextInt(10, 21); // 10–20 operations
+				for (int i = 0; i < numOps; i++) {
+					String description = descriptions.get(random.nextInt(descriptions.size()));
+					double creditAmount = 1000 + Math.random() * 10000;
+					double debitAmount = 200 + Math.random() * 3000;
+					accountOperationService.credit(accountId, creditAmount, description);
+					accountOperationService.debit(accountId, debitAmount, description);
 				}
 			}
-			};
+		};
 	}
+
 }
