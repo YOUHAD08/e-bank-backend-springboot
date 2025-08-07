@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Entity
@@ -15,6 +16,8 @@ public class Customer {
     private String name;
     private String email;
     private String city;
+    private String password;
+    private String roles;
     @OneToMany(mappedBy = "customer")
     //this tell to the PI that does serialisation json : jackson
     // convert object java to json format

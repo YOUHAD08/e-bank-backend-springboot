@@ -13,18 +13,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 public class BackendApplication {
 
-
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	private final AccountOperationService accountOperationService;
 	long startMillis = new Date(120, 0, 1).getTime(); // January 1, 2020
 	long endMillis = System.currentTimeMillis();
@@ -53,6 +54,12 @@ public class BackendApplication {
 				customerDTO.setEmail(name.toLowerCase() + "@gmail.com");
 				String randomCity = cities.get(random.nextInt(cities.size()));
 				customerDTO.setCity(randomCity);
+				if (name.equalsIgnoreCase("Ayoub")) {
+					customerDTO.setRoles("ADMIN,USER");
+				} else {
+					customerDTO.setRoles("USER");
+				}
+				customerDTO.setPassword(passwordEncoder.encode(name));
 				customerService.createCustomer(customerDTO);
 			}
 

@@ -9,5 +9,7 @@ public class CustomerDTO {
     private String name;
     private String email;
     private String city;
+    private String password;
+    private String roles;
 
 }
