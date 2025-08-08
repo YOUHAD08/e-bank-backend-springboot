@@ -62,7 +62,7 @@ public class SecurityConfig {
                 // No sessions — every request must be authenticated by token
                 .csrf(csrf->csrf.disable())
                 // No sessions — every request must be authenticated by token
-                .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**").permitAll())
+                .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**","/auth/signup/**").permitAll())
                 .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
                 //.httpBasic(Customizer.withDefaults())
                 // Use JWT tokens to authenticate users

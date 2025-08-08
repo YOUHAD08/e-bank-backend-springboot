@@ -57,4 +57,11 @@ public class CustomerRestController {
         log.info("Delete customer");
         customerService.deleteCustomer(id);
     }
+
+    @GetMapping("/customer/search")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
+    public CustomerDTO searchCustomer(@RequestParam(name = "name" ,defaultValue = "") String name){
+        log.info("Search customer by Name");
+        return customerService.searchCustomerByName(name);
+    }
 }

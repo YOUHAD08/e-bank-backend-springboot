@@ -1,11 +1,17 @@
 package ma.youhad.backend.web;
 
+import lombok.AllArgsConstructor;
+import ma.youhad.backend.dtos.CustomerDTO;
+import ma.youhad.backend.services.interfaces.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -19,14 +25,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/auth")
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityController {
 
-    @Autowired
+
     private AuthenticationManager authenticationManager;
-    @Autowired
     private JwtEncoder jwtEncoder;
+    private CustomerService customerService;
+    private PasswordEncoder passwordEncoder ;
 
     @GetMapping("/profile")
     public Authentication authentication(Authentication authentication) {
@@ -61,4 +69,10 @@ public class SecurityController {
         return Map.of("access-token", jwt);
     }
 
+    @PostMapping("/signup")
+    public CustomerDTO signup(@RequestBody CustomerDTO customerDTO) {
+        customerDTO.setRoles("USER");
+        customerDTO.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
+        return customerService.createCustomer(customerDTO);
+    }
 }
